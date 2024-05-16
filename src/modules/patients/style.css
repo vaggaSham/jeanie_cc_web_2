@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.patient-Table thead{
+background-color: #f9fafb;
+border: none;
+}
+.patient-Table .table{
+    border: 1px solid #B0CBE8;
+    border-radius: 4px;
+}
+.patient-Table .tbody {
+    display: block;
+    height: calc(100vh - 230px);
+    overflow: auto;
+}
+.patient-Table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
+}
+
+ .patient-Table .td {
+    padding: 22px 15px;
+}
+.patient-Table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+.patient-Table tbody tr:nth-child(odd) {
+    background-color: #eef5fd;
+}
+.patient-Table th div{
+    color: #444444;
+}

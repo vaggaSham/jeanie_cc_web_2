@@ -1,0 +1,36 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  mode: "jit",
+  purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {},
+    fontFamily: {
+      Epilogue: ["Epilogue", "sans"],
+      Mulish: ["Mulish", "sans"],
+    },
+    colors: {
+      white: "#ffffff",
+      "white-s": "#FDFCFC",
+      primary: "#179ec2",
+      secondary: "#CBDDEF",
+      gray: "#8891A0",
+      "text-primary": "#red",
+      "light-black": "#323232",
+      "main-blue": "#065BEA",
+      "under-line-blue": "#468AFD",
+      "header-bg": "#051321",
+      "search-bg": "#0B1C2D",
+      "light-gray": "#707D8B",
+      "h-border": "#454647",
+      "menu-active-bg": "#2B89A2",
+      "accordian-title": "#707D8B",
+      "dark-black": "#19222B",
+      "lighter-gray": "#A2A3A3",
+      orange: "#F0B829",
+      "card-bg":'#F2F6FB',
+      'light-blue':'#418edc',
+    },
+  },
+  plugins: [],
+};

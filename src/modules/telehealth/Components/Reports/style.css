@@ -1,0 +1,47 @@
+.slick-dots{
+    text-align: left;
+}
+.slick-slide img{
+    width: 100%;
+    height: 388px;
+     outline: none;
+}
+.slick-prev {
+    background-image: url('../../../../assets/images/left.svg');
+    /* Adjust the background size, position, etc. as needed */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Hide default text content */
+.slick-prev:before {
+    content: '';
+}
+.slick-next {
+    background-image: url('../../../../assets/images/left.svg');
+    /* Adjust the background size, position, etc. as needed */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+}
+
+/* Hide default text content */
+.slick-next:before {
+    content: '';
+}
+.slick-next:focus, .slick-next:hover{
+    background: url('../../../../assets/images/left.svg');
+    transform: rotate(180deg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.slick-prev:focus, .slick-prev:hover{
+    background: url('../../../../assets/images/left.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+

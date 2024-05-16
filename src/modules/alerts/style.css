@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.alert-Table thead, .task-Table thead{
+  background-color: #f9fafb;
+  border: none;
+}
+.alert-Table .table, .task-Table .table {
+  border: 1px solid #b0cbe8;
+  border-radius: 4px;
+}
+.alert-Table .tbody{
+  display: block;
+  height: 200px;
+  overflow: auto;
+}
+.task-Table .tbody {
+    display: block;
+    height: 300px;
+    overflow: auto;
+  }
+.alert-Table tr, .task-Table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* even columns width , fix width of table too*/
+}
+
+.alert-Table .td, .task-Table .td {
+  padding: 22px 15px;
+}
+.alert-Table tbody tr:nth-child(even), .task-Table tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+.alert-Table tbody tr:nth-child(odd), .task-Table tbody tr:nth-child(odd) {
+  background-color: #eef5fd;
+}
+.alert-Table th div{
+  color: #444444;
+}
+
+.task-Table [type=checkbox]:checked{
+  background-image: none;
+}
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  background-color: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.custom-checkbox:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 0;
+  /* opacity: 1; */
+  background-color: #29bab3;
+}
+
+/* Add focus styles if needed */
+.custom-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
