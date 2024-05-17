@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import minize from "../../../../assets/images/minize.svg";
 import chatSend from "../../../../assets/images/chatSend.svg";
 import { useTeleHealth } from ".";
+import QuickNotes from "../../quickNotes";
 
 // Define the shape of the Agora context
 interface AgoraContextType {
@@ -174,10 +175,19 @@ const AgoraCall = () => {
             </div>
           </div>
         )}
+
+        {/* {
+          isChatShow && (
+            <div
+              className="absolute w-[500px] h-[500px] shadow-2xl rounded-xl border-[1px] border-dark-black left-[100%] bottom-10 z-[100]">
+              <QuickNotes />
+            </div>
+          )
+        } */}
+   
         <div
-          className={`absolute z-[99] ${
-            isFloating ? "left-[20%] bottom-4" : "right-[15px] bottom-4"
-          }  flex gap-2.5 bg-[#a0969a] px-2 py-[5px] rounded-[52px]`}
+          className={`absolute z-[99] ${isFloating ? "left-[20%] bottom-4" : "right-[15px] bottom-4"
+            }  flex gap-2.5 bg-[#a0969a] px-2 py-[5px] rounded-[52px]`}
         >
           <div
             role="button"

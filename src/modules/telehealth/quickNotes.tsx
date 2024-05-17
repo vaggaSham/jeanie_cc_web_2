@@ -3,6 +3,7 @@ import minize from "../../assets/images/minize.svg";
 import chatSend from "../../assets/images/chatSend.svg";
 import Message from "../../assets/images/messageSent.png";
 import dots from "../../assets/images/dotsIcon.svg";
+import record from "../../assets/images/document1.png";
 import AC, { AgoraChat } from 'agora-chat'
 import WebIM from 'agora-chat'
 import moment from "moment";
@@ -13,6 +14,7 @@ type MessageFormat = {
   position: string;
   msgType: string;
   fileUrl: string | File;
+  fileName?: string;
 }
 
 const appKey = "411130085#1315009";
@@ -28,7 +30,8 @@ const conn = new WebIM.connection({
 const QuickNotes = () => {
   const count = useRef<any>(0)
   const messageView = useRef<any>(null);
-  const fileInuptRef = useRef<any>(null);
+  const imageInuptRef = useRef<any>(null);
+  const documentInuptRef = useRef<any>(null);
   const [messageValue, setMessageValue] = useState<any>('')
   const [messageStack, setMessageStack] = useState<MessageFormat[]>([])
   const [showFileOptions, setShowFileOptions] = useState<boolean>(false);
@@ -90,7 +93,7 @@ const QuickNotes = () => {
         text: "",
         fileUrl: message?.url,
         position: "left",
-
+        fileName: message?.filename
       }
       setMessageStack((prevArray: any) => [...prevArray, msgObj]);
     },
@@ -121,21 +124,6 @@ const QuickNotes = () => {
     }
     return result;
   }
-
-
-
-
-
-
-
-
-
-  // const openChatConnection=()=>{
-  //   conn.open({
-  // 		user: userId,
-  // 		agoraToken: token,
-  // 	});
-  // }
 
   function refreshToken(username: any, password: any) {
     postData('https://a41.chat.agora.io/app/chat/user/login', { "userAccount": username, "userPassword": password })
@@ -203,13 +191,14 @@ const QuickNotes = () => {
   const handleSendMssage = (fileType: string, selectedFile?: File | any) => {
     if (fileType === 'txt' && (!messageValue || messageValue.trim() === "")) return;
     if (fileType !== 'txt' && (!selectedFile)) return;
-
+    console.log("selected file = ", selectedFile)
     const msgObj: MessageFormat = {
       time: moment().format("hh:mm"),
       text: fileType === "txt" ? messageValue : "",
       position: "right",
       msgType: fileType,
-      fileUrl: fileType !== "txt" ? selectedFile : ""
+      fileUrl: fileType !== "txt" ? selectedFile : "",
+      fileName: fileType === "file" ? selectedFile.name : ""
     }
     setMessageStack((prevArray: MessageFormat[]) => [...prevArray, msgObj]);
 
@@ -222,30 +211,53 @@ const QuickNotes = () => {
         msg: messageValue               // The user receiving the message (user ID)
       }
       globalOption = { ...option };
-    } else {
+    } else if (fileType === "img") {
+      let selectedImage: any = document.getElementById("imageInput");
+      let file = AC.utils.getFileUrl(selectedImage);
       let option = {
         type: 'img',
-        file: selectedFile,
+        file: file,
         ext: {
           file_length: selectedFile.size,
         },
         to: "rahul_4950",
         chatType: "singleChat",
-        onFileUploadError: function (e:any) {
-          console.log("onFileUploadError",e);
+        onFileUploadError: function (e: any) {
+          console.log("onFileUploadError", e);
         },
         // Reports the progress of uploading the image file.
         onFileUploadProgress: function (e: any) {
           console.log(e);
         },
         // Occurs when the image file is successfully uploaded.
-        onFileUploadComplete: function (e:any) {
-          console.log("onFileUploadComplete",e);
+        onFileUploadComplete: function (e: any) {
+          console.log("onFileUploadComplete", e);
         },
       };
-      globalOption={...option};
+      globalOption = { ...option };
+    } else if (fileType === "file") {
+      let selectedFile: any = document.getElementById("documentInput");
+      let file = AC.utils.getFileUrl(selectedFile);
+      let option: any = {
+        type: 'file',
+        file: file,
+        to: "rahul_4950",
+        chatType: "singleChat",
+        onFileUploadError: function () {
+          console.log("onFileUploadError");
+        },
+        onFileUploadProgress: function (e: any) {
+          console.log(e);
+        },
+        onFileUploadComplete: function () {
+          console.log("onFileUploadComplete");
+        },
+        ext: { file_length: file.data.size },
+      };
+      globalOption = { ...option };
+
     }
-    console.log("global oj  = ===",globalOption)
+
 
     let msg = AC.message.create(globalOption);
 
@@ -265,12 +277,12 @@ const QuickNotes = () => {
 
 
   return (
-    <div className="bg-card-bg  rounded-[20px]  p-[18px] mt-[15px]  min-h-[224px] relative">
+    <div className="bg-card-bg  rounded-[20px]  p-[18px] h-[100%] relative">
       <div className="flex justify-between mb-2.5">
         <p className="text-lg  font-semibold font-Mulish" onClick={() => { }}>Quick Notes</p>
         <img src={minize} alt="icon" />
       </div>
-      <div ref={messageView} className="h-[190px] overflow-y-auto mb-[50px]" >
+      <div ref={messageView} className=" h-[380px] overflow-y-auto mb-[50px]" >
         {
           messageStack?.map((item: any) => {
             return (
@@ -286,7 +298,19 @@ const QuickNotes = () => {
                           <img className="rounded-xl" width={120} src={typeof item.fileUrl === "string" ? item.fileUrl : URL.createObjectURL(item.fileUrl)} alt="image msg" />
                         </div>
                       ) : (
-                        <div></div>
+                        <div className="m-1 rounded-xl flex justify-between items-center w-[200px] h-[50px] bg-[#dde3e9] ">
+                          <div
+                            className="text-[12px]  p-2 max-w-[150px] font-Epilogue underline cursor-pointer truncate"
+                            onClick={() => item?.position === "left" ? window.open(item?.fileUrl, "_blank") : window.open(URL.createObjectURL(item?.fileUrl), "_blank")}
+                          >
+                            {item?.fileName}
+                          </div>
+                          <div className="flex justify-center items-center bg-white self-center mr-1  w-[40px] h-[40px] rounded-xl">
+                            <img className="" width={20} src={record} alt="document" />
+                          </div>
+
+                          {/* <iframe className="rounded-xl" width={120} src={typeof item.fileUrl === "string" ? item.fileUrl : URL.createObjectURL(item.fileUrl)}  /> */}
+                        </div>
                       )
                   }
                   <div className="w-[30px] text-[8px] justify-center text-[#656664] font-semibold flex items-end pb-2"><span>{item?.time}</span></div>
@@ -310,7 +334,6 @@ const QuickNotes = () => {
               id="search"
               className="focus:outline-none block w-full font-Mulish pl-5 pr-[50px] py-0 text-sm h-[43px] leading-[43px] rounded-[28px] border-[none]"
               placeholder="Type here"
-              required
               value={messageValue}
               onChange={(e) => {
                 setMessageValue(e.target.value)
@@ -329,12 +352,12 @@ const QuickNotes = () => {
 
               <div className="px-1 relative" onMouseEnter={() => setShowFileOptions(true)} onMouseLeave={() => setShowFileOptions(false)}>
                 {/* <img className="cursor-pointer"  src={dots} alt="" onClick={() => fileInuptRef?.current?.click()} /> */}
-                <img className="cursor-pointer " src={chatSend} alt="" onClick={() => fileInuptRef?.current?.click()} />
+                <img className="cursor-pointer " src={chatSend} alt="" onClick={() => imageInuptRef?.current?.click()} />
                 {
                   showFileOptions && (
                     <div className="absolute h-[80px] w-[70px] bottom-0 right-0 bg-white rounded-lg shadow-2xl text-[14px] font-bold p-3 font-Mulish">
-                      <div className="mb-2 cursor-pointer" onClick={() => fileInuptRef?.current?.click()}>Image</div>
-                      <div className="cursor-pointer">File</div>
+                      <div className="mb-2 cursor-pointer" onClick={() => imageInuptRef?.current?.click()}>Image</div>
+                      <div className="cursor-pointer" onClick={() => documentInuptRef?.current?.click()}>File</div>
                     </div>
                   )
                 }
@@ -343,7 +366,8 @@ const QuickNotes = () => {
               {/* <img className="cursor-pointer" src={chatSend} alt=""  onClick={() => fileInuptRef?.current?.click()}/> */}
             </div>
             <div className="hidden">
-              <input ref={fileInuptRef} type="file" accept="image/*" onChange={(e: any) => handleSendMssage("img", e.target.files[0])} />
+              <input id={"imageInput"} ref={imageInuptRef} type="file" accept="image/*" onChange={(e: any) => handleSendMssage("img", e.target.files[0])} />
+              <input id={"documentInput"} ref={documentInuptRef} type="file" accept=".pdf,.doc,.docx,.xlsx,.csv" onChange={(e: any) => handleSendMssage("file", e.target.files[0])} />
             </div>
           </div>
         </form>
@@ -353,3 +377,4 @@ const QuickNotes = () => {
 };
 
 export default QuickNotes;
+

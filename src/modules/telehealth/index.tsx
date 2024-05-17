@@ -69,7 +69,7 @@ function TeleHealth() {
             </div>
             <div className="w-[50%] bg-gray-800">
               <CarePlan />
-              <QuickNotes />
+              <div className="h-[300px]"><QuickNotes /></div>
             </div>
           </div>
         );
